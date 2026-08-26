@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wi-Fi 설정 변경 안내 · Android</title>
+<style>
+  :root{
+    --blue:#1E3FFA;
+    --blue-deep:#132AC2;
+    --ink:#14161C;
+    --sub:#6B7078;
+    --line:#E7E9EE;
+    --bg:#F3F4F7;
+    --card:#FFFFFF;
+    --chip:#EEF1FF;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Pretendard",sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:520px;margin:0 auto;padding:0 0 64px;}
+
+  /* Header */
+  header{
+    background:linear-gradient(155deg,var(--blue) 0%, var(--blue-deep) 100%);
+    color:#fff;
+    padding:36px 22px 30px;
+    border-radius:0 0 28px 28px;
+    position:relative;
+    overflow:hidden;
+  }
+  header::after{
+    content:"";
+    position:absolute;
+    right:-40px;top:-40px;
+    width:160px;height:160px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.08);
+  }
+  .os-chip{
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(255,255,255,0.16);
+    border:1px solid rgba(255,255,255,0.3);
+    padding:5px 12px;
+    border-radius:100px;
+    font-size:12px;font-weight:600;letter-spacing:.02em;
+  }
+  header h1{
+    margin:14px 0 6px;
+    font-size:23px;
+    font-weight:800;
+    letter-spacing:-0.02em;
+  }
+  header p{
+    margin:0;
+    font-size:13.5px;
+    color:rgba(255,255,255,0.82);
+  }
+
+  /* Section titles */
+  .section-title{
+    display:flex;align-items:center;gap:10px;
+    margin:36px 22px 14px;
+  }
+  .section-title .num{
+    width:26px;height:26px;flex:none;
+    border-radius:8px;
+    background:var(--ink);
+    color:#fff;
+    font-size:13px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .section-title h2{
+    margin:0;
+    font-size:16.5px;
+    font-weight:800;
+    letter-spacing:-0.01em;
+  }
+  .section-desc{
+    margin:0 22px 16px;
+    font-size:13px;
+    color:var(--sub);
+  }
+
+  /* Wi-Fi info card */
+  .wifi-card{
+    margin:-18px 22px 8px;
+    background:var(--card);
+    border-radius:18px;
+    box-shadow:0 10px 24px rgba(20,22,28,0.10);
+    padding:18px 18px 16px;
+    position:relative;
+    z-index:2;
+  }
+  .wifi-card .label{
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--blue);
+    letter-spacing:.03em;
+    margin-bottom:10px;
+  }
+  .wifi-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 12px;
+    background:var(--chip);
+    border-radius:12px;
+    margin-bottom:8px;
+  }
+  .wifi-row:last-child{margin-bottom:0;}
+  .wifi-row .kv{display:flex;flex-direction:column;gap:1px;}
+  .wifi-row .k{font-size:10.5px;color:var(--sub);font-weight:600;}
+  .wifi-row .v{font-size:15.5px;font-weight:700;color:var(--ink);font-family:ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:.01em;}
+  .copy-btn{
+    border:none;background:var(--ink);color:#fff;
+    font-size:11.5px;font-weight:700;
+    padding:7px 12px;border-radius:9px;
+    cursor:pointer;flex:none;
+  }
+  .copy-btn.copied{background:var(--blue);}
+  .wifi-note{
+    margin-top:10px;
+    font-size:12px;
+    color:var(--sub);
+    padding-left:2px;
+  }
+
+  /* Step cards */
+  .steps{margin:0 22px;display:flex;flex-direction:column;gap:10px;}
+  .step{
+    background:var(--card);
+    border-radius:16px;
+    border:1px solid var(--line);
+    overflow:hidden;
+  }
+  .step .head{
+    display:flex;align-items:center;gap:10px;
+    padding:14px 16px 12px;
+  }
+  .step .badge{
+    width:22px;height:22px;flex:none;
+    border-radius:50%;
+    background:var(--chip);
+    color:var(--blue);
+    font-size:12px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step .title{font-size:14.5px;font-weight:700;}
+  .step .body{padding:0 16px 16px;}
+  .step .desc{font-size:13px;color:var(--sub);margin:0 0 10px;}
+  .step img{
+    width:100%;
+    display:block;
+    border-radius:12px;
+    border:1px solid var(--line);
+  }
+  .step .hint{
+    margin-top:8px;
+    font-size:12px;
+    color:var(--blue-deep);
+    background:var(--chip);
+    padding:8px 10px;
+    border-radius:9px;
+  }
+
+  /* App flow slides (wide images) */
+  .slide{
+    margin:0 22px 12px;
+    background:var(--card);
+    border-radius:16px;
+    border:1px solid var(--line);
+    padding:10px;
+  }
+  .slide img{width:100%;display:block;border-radius:10px;}
+  .slide .cap{
+    font-size:12px;color:var(--sub);
+    padding:10px 6px 2px;
+  }
+
+  /* Divider */
+  .divider{
+    margin:34px 22px 0;
+    border-top:1px dashed var(--line);
+  }
+
+  footer{
+    margin:38px 22px 0;
+    padding:18px 18px;
+    background:var(--card);
+    border-radius:16px;
+    border:1px solid var(--line);
+    font-size:12.5px;
+    color:var(--sub);
+    text-align:center;
+  }
+  footer b{color:var(--ink);}
+
+  .toast{
+    position:fixed;left:50%;bottom:26px;
+    transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;
+    font-size:13px;font-weight:600;
+    padding:11px 18px;border-radius:100px;
+    opacity:0;pointer-events:none;
+    transition:all .25s ease;
+    box-shadow:0 8px 24px rgba(0,0,0,0.25);
+    z-index:50;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="os-chip">🤖 Android (안드로이드)</span>
+    <h1>Wi-Fi 설정 변경 안내</h1>
+    <p>매장 인터넷 회선이 바뀌었을 때, 아래 순서대로 진행해 주세요.</p>
+  </header>
+
+  <div class="wifi-card">
+    <div class="label">변경할 Wi-Fi 정보</div>
+    <div class="wifi-row">
+      <div class="kv"><span class="k">네트워크 이름 (SSID)</span><span class="v" id="ssid">pbc</span></div>
+      <button class="copy-btn" onclick="copyText('ssid',this)">복사</button>
+    </div>
+    <div class="wifi-row">
+      <div class="kv"><span class="k">비밀번호</span><span class="v" id="pw">maeil01!@</span></div>
+      <button class="copy-btn" onclick="copyText('pw',this)">복사</button>
+    </div>
+    <div class="wifi-note">* 이 네트워크는 목록에 자동으로 뜨지 않는 숨겨진 네트워크예요. 아래 STEP 1 순서대로 직접 등록해 주세요.</div>
+  </div>
+
+  <div class="section-title"><span class="num">1</span><h2>휴대폰에서 Wi-Fi 연결하기</h2></div>
+  <p class="section-desc">먼저 휴대폰을 새 Wi-Fi에 연결합니다. 위에서 복사한 이름/비밀번호를 사용하세요.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="head"><span class="badge">1</span><span class="title">설정 &gt; 연결 &gt; Wi-Fi 선택</span></div>
+      <div class="body">
+        <p class="desc">휴대폰 <b>설정</b>에서 <b>연결</b> 메뉴로 들어가 <b>Wi-Fi</b>를 눌러주세요.</p>
+        <img src="images/and-1-wifi-menu.jpg" alt="설정 > 연결 > Wi-Fi 선택">
+      </div>
+    </div>
+    <div class="step">
+      <div class="head"><span class="badge">2</span><span class="title">‘네트워크 추가’ 선택</span></div>
+      <div class="body">
+        <p class="desc">사용 가능한 네트워크 목록 아래 <b>네트워크 추가</b>를 눌러주세요.</p>
+        <img src="images/and-2-add-network.jpg" alt="네트워크 추가 선택">
+        <div class="hint">숨겨진 네트워크라 목록에는 보이지 않아요. 그래서 ‘네트워크 추가’로 직접 등록해요.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="head"><span class="badge">3</span><span class="title">이름·비밀번호 입력 후 저장</span></div>
+      <div class="body">
+        <p class="desc"><b>네트워크 이름</b>에 <b>pbc</b> 를 입력하고, <b>보안</b>은 <b>WPA/WPA2-Personal</b>인지 확인합니다. <b>비밀번호</b>란에 <b>maeil01!@</b> 를 입력한 뒤, <b>숨겨진 네트워크</b> 토글이 켜져 있는지 확인하고 <b>저장</b>을 눌러주세요.</p>
+        <img src="images/and-3-name-pw.jpg" alt="이름과 비밀번호 입력 후 저장">
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title"><span class="num">2</span><h2>리프 앱에서 허브 Wi-Fi 재설정하기</h2></div>
+  <p class="section-desc">휴대폰이 새 Wi-Fi에 연결된 상태에서, 리프 앱으로 허브의 Wi-Fi 정보도 같은 네트워크로 바꿔주세요.</p>
+
+  <div class="slide">
+    <img src="images/ios-app-1.jpg" alt="기기 관리 선택 - Wi-Fi 재설정 선택 - 허브 MAC 주소 확인 - 블루투스 스캔 선택">
+    <div class="cap">① 기기 관리 선택 → ② Wi-Fi 재설정 선택 → ③ 허브 MAC 주소 확인 → ④ 블루투스 스캔 선택</div>
+  </div>
+  <div class="slide">
+    <img src="images/and-app-2.jpg" alt="허브 선택 - 허브 연결 성공 - Wi-Fi 선택 - 비밀번호 입력 (Android)">
+    <div class="cap">⑤ 허브 선택 → ⑥ 허브 연결 성공 → ⑦ Wi-Fi 선택 → ⑧ 비밀번호 입력 <b>(안드로이드 전용 화면)</b></div>
+  </div>
+  <div class="slide">
+    <img src="images/ios-app-3.jpg" alt="허브 Wi-Fi 정보 변경 중 - 재설정 완료 - 기기 관리">
+    <div class="cap">⑨ 허브 Wi-Fi 정보 변경 중 → ⑩ 재설정 완료 → ⑪ 기기 관리에서 최종 확인</div>
+  </div>
+
+  <footer>
+    안내대로 진행이 어렵거나 오류가 발생하면<br>
+    고객센터 <b>02-6052-1507</b> 로 연락해 주세요.
+  </footer>
+
+</div>
+
+<div class="toast" id="toast">복사되었습니다</div>
+
+<script>
+function copyText(id, btn){
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent = '완료';
+    btn.classList.add('copied');
+    showToast(text + ' 복사됨');
+    setTimeout(()=>{btn.textContent='복사'; btn.classList.remove('copied');}, 1400);
+  }).catch(()=>{
+    showToast('복사에 실패했어요');
+  });
+}
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>t.classList.remove('show'), 1600);
+}
+</script>
+</body>
+</html>
